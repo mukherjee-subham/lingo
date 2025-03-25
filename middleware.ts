@@ -1,6 +1,12 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, ClerkMiddlewareAuth, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+const isHomePage = createRouteMatcher(["/"]); // Add your specific routes here
+export default clerkMiddleware(async (auth, req) => {
+
+    if (!isHomePage(req)) {
+       await auth.protect();
+    }
+});
 
 export const config = {
   matcher: [
